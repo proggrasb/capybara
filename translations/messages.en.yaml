@@ -1,0 +1,11 @@
+startText: Press button to start test
+test:
+  question: Question
+result:
+  wrongAnswers: Wrong answers
+  rightAnswers: Right answers
+  noWrongAnswers: "No incorrect answers found!"
+  noRightAnswers: "No correct answers found!"
+button:
+  start: Start
+  finish: Finish

@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block js %}
+    <script>var testId = {{ testId }}</script>
+    <script src="{{ asset('js/test.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+    <nav class="navbar fixed-top bg-light">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Capybara</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container" style="margin-top:50px">
+        <div class="alert alert-danger alert-dismissible fade show" style="display:none;" id="alert-error">
+            <strong>Error!</strong> A problem has been occurred
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <div class="justify-content-center aligns-items-center">
+        {% for question in questions %}
+            <div class="row justify-content-center mt-3">
+                <div class="col-md-6">
+                    <div class="card mb3">
+                        <div class="card-header">
+                            <span style="font-weight:bold;">{{ 'test.question' | trans }} #{{ loop.index }}: </span><br>
+                            {{ question.question }}
+                        </div>
+                        {% for answer in question.answers %}
+                        <div class="card-body">
+                            <div class="form-check">
+                                {% set cb_id = 'cb-' ~ question.id ~ '-' ~ answer.id %}
+                                <input class="form-check-input" type="checkbox" value="" id="{{ cb_id }}">
+                                <label class="form-check-label" for="{{ cb_id }}">
+                                    {{ answer.answer }}
+                                </label>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+            <div class="row justify-content-center mt-3">
+                <div class="col-md-6">
+                    <div class="card text-center mb3">
+                        <div class="card-body">
+                            <button class="btn btn-primary" id="btn-finish">{{ 'button.finish' | trans}}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

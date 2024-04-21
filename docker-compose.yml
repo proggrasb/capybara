@@ -1,0 +1,47 @@
+version: '3.9'
+
+services:
+    nginx:
+        build:
+            context: ./docker/nginx
+            args:
+                PROJECT_NAME: capybara
+                WORKDIR_SITE: "/var/www/capybara"
+                FASTCGI_READ_TIMEOUT: 600
+        container_name: capybara-site
+        restart: always
+        volumes:
+            - ./:/var/www/capybara/
+        ports:
+            - '9090:80'
+        depends_on:
+            - php
+
+    php:
+        build:
+            context: ./docker/php
+            args:
+                WORKDIR_SITE: "/var/www/capybara"
+                PHP_MAX_EXECUTION_TIME: 600
+        container_name: capybara-php
+        restart: always
+        volumes:
+            - ./:/var/www/capybara/
+        depends_on:
+            - db
+
+    db:
+        image: postgres:latest
+        environment:
+            POSTGRES_USER: "capybara"
+            POSTGRES_PASSWORD: "capybara"
+            POSTGRES_DB: "capybara"
+        container_name: capybara-db
+        restart: always
+        volumes:
+            - postgres-capybara-data:/var/lib/postgresql/data:rw
+        ports:
+            - "4020:5432"
+
+volumes:
+    postgres-capybara-data:

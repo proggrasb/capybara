@@ -1,0 +1,101 @@
+{% extends 'base.html.twig' %}
+
+{% block js %}
+    <script src="{{ asset('js/results.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+    <nav class="navbar fixed-top bg-light">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Capybara - Test results</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container" style="margin-top:50px">
+        <div class="justify-content-center aligns-items-center">
+            <div class="row justify-content-center mt-3">
+                <div class="col-md-6">
+                    <div class="card mb3">
+                        <div class="card-header">
+                            <span style="font-weight:bold;">{{ 'result.rightAnswers' | trans }}</span><br>
+                        </div>
+                        <div class="card-body">
+                            {% set hasItems = false %}
+                            {% for result in results %}
+                                {% if result.isValid %}
+                                    {% set hasItems = true %}
+                                    <div class="card mb3">
+                                        <div class="card-header">
+                                            <span style="font-weight:bold;">{{ 'test.question' | trans }} #{{ loop.index }}: </span><br>
+                                            {{ result.question.question }}
+                                        </div>
+                                        <div class="card-body">
+                                            {% for answer in result.question.answers %}
+                                            <div class="form-check">
+                                                {% set cb_id = 'cb-' ~ result.question.id ~ '-' ~ answer.id %}
+                                                <input class="form-check-input" type="checkbox" id="{{ cb_id }}" onclick="return false;" {% if answer.id in result.answers %}checked{% endif %}>
+                                                <label class="form-check-label" for="{{ cb_id }}">
+                                                    {{ answer.answer }}
+                                                </label>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                            {% if hasItems == false %}
+                                <span>{{ 'result.noRightAnswers' | trans  }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card mb3">
+                        <div class="card-header">
+                            <span style="font-weight:bold;">{{ 'result.wrongAnswers' | trans }}</span><br>
+                        </div>
+                        <div class="card-body">
+                            {% set hasItems = false %}
+                            {% for result in results %}
+                                {% if not result.isValid %}
+                                    {% set hasItems = true %}
+                                    <div class="card mb3">
+                                        <div class="card-header">
+                                            <span style="font-weight:bold;">{{ 'test.question' | trans }} #{{ loop.index }}: </span><br>
+                                            {{ result.question.question }}
+                                        </div>
+                                        <div class="card-body">
+                                            {% for answer in result.question.answers %}
+                                                <div class="form-check">
+                                                    {% set cb_id = 'cb-' ~ result.question.id ~ '-' ~ answer.id %}
+                                                    <input class="form-check-input" type="checkbox" id="{{ cb_id }}" onclick="return false;" {% if answer.id in result.answers %}checked{% endif %}>
+                                                    <label class="form-check-label" for="{{ cb_id }}">
+                                                        {{ answer.answer }}
+                                                    </label>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                            {% if hasItems == false %}
+                                <span>{{ 'result.noWrongAnswers' | trans  }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-3">
+            <div class="col-md-6">
+                <div class="card text-center mb3">
+                    <div class="card-body">
+                        <button class="btn btn-primary" id="btn-finish">{{ 'button.finish' | trans }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock %}
